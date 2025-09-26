@@ -36,7 +36,6 @@ export interface IUser {
 }
 
 // TELEGRAM
-
 export interface StatusMessage {
   notificationOn: Toggle;
   tp: TPLevels;
@@ -50,4 +49,111 @@ export interface StatusMessage {
   maxTopHolderPercentage: number;
   maxTopTenHoldersPercentage: number;
   isActive: Toggle;
+}
+
+// TOKEN LEADERBOARD
+export interface TokenDataItem {
+  vol_24hr?: string;
+  narrative?: string[];
+  is_coin: number;
+  pc_1_hr: number;
+  pc_6_hr: number;
+  pc_24_hr: number;
+  liquidity: number;
+  market_cap: string;
+  chain?: string;
+  token_name?: string;
+  trading_since?: string;
+  age_in_seconds?: string;
+  pair_created_at?: string;
+  token_icon?: string;
+  mentions_change_7_d?: number;
+  mentions_change_24_hr?: number;
+  mentions_change_1_hr?: number;
+  followers_count?: number;
+  twitter?: string;
+  telegram?: string;
+  mention_count_1hr?: number;
+  mention_count_24hr?: number;
+  mention_count_15min?: number;
+  mention_count_6hr?: number;
+  total_unique_accounts?: number;
+  total_unique_accounts_24hr?: number;
+  token_id?: string;
+  pair_id?: string;
+  token_symbol?: string;
+  buy_tax?: number;
+  sell_tax?: number;
+  is_contract_verified?: number;
+  lp_lock_percentage?: number;
+  lp_burned: number;
+  is_honeypot?: number;
+  "24_hr_data"?: {
+    change: string;
+    total_volume: number;
+  };
+  holders_count?: number;
+  token_twitter?: string;
+  token_telegram?: string;
+  token_twitter_account?: string;
+  token_telegram_account?: string;
+  token_website?: string;
+  dex_url?: string;
+  influencer_count_24hr?: string;
+  is_cmc_listed?: string | number;
+  is_cg_listed?: string | number;
+  is_coinbase?: string | number;
+  is_gateio?: string | number;
+  is_bingx?: string | number;
+  is_mexc?: string | number;
+  is_okx?: string | number;
+  is_binance?: string | number;
+  is_bybit?: string | number;
+  is_kucoin?: string | number;
+  is_bitget?: string | number;
+  is_bitmart?: string | number;
+  smart_followers?: number;
+  t_1hr_mentions?: number;
+  t_2hr_mentions?: number;
+  t_3hr_mentions?: number;
+  t_4hr_mentions?: number;
+  t_5hr_mentions?: number;
+  t_6hr_mentions?: number;
+  t_7hr_mentions?: number;
+  t_8hr_mentions?: number;
+  t_9hr_mentions?: number;
+  hourly_median?: number;
+  t_1d_mentions?: number;
+  t_2d_mentions?: number;
+  t_3d_mentions?: number;
+  t_4d_mentions?: number;
+  t_5d_mentions?: number;
+  t_6d_mentions?: number;
+  t_7d_mentions?: number;
+  t_8d_mentions?: number;
+  t_9d_mentions?: number;
+  daily_median?: number;
+  token_supply?: number;
+  token_supply_dex?: number;
+  profile_image_url?: string;
+  ath_market_cap?: number;
+  ath_timestamp?: string;
+  market_data_source?: string;
+  cmc_slug?: string;
+  cg_id?: string;
+}
+
+export interface GetTokenLeaderboardResponse {
+  result: TokenDataItem[];
+  is_more_data: boolean;
+}
+
+export interface GetTokenLeaderboardParams {
+  start?: number;
+  limit?: number;
+  market_cap_gte?: number;
+  market_cap_lte?: number;
+  vol_24hr_gte?: number;
+  sort_by?: string;
+  is_best_pair?: number;
 }
