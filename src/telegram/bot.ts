@@ -68,16 +68,6 @@ const initTelegramBot = async () => {
         tgId.toString(),
         formatStatusMessage({
           notificationOn: userData.notificationOn,
-          tp: userData.tp,
-          sl: userData.sl,
-          slippagePercentage: userData.slippagePercentage,
-          purchaseAmountInSol: userData.purchaseAmountInSol,
-          poolType: userData.poolType,
-          priorityFeeInSol: userData.priorityFeeInSol,
-          minimumLiquidity: userData.minimumLiquidity,
-          autoSellTimeMinutes: userData.autoSellTimeMinutes,
-          maxTopHolderPercentage: userData.maxTopHolderPercentage,
-          maxTopTenHoldersPercentage: userData.maxTopTenHoldersPercentage,
           isActive: userData.isActive,
         })
       );

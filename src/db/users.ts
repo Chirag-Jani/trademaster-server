@@ -1,6 +1,6 @@
 import { FilterQuery } from "mongoose";
 import { errorResponse, successResponse } from "../common/helper/sendResponse";
-import { IUser, PoolType, Toggle, TPLevels } from "../common/types";
+import { IUser, Toggle } from "../common/types";
 import UserModal from "./UserModal";
 
 const createUser = async (telegramId: string) => {
@@ -19,17 +19,7 @@ const getUser = async (telegramId: string) => {
     const user = await UserModal.findOne(
       { telegramId },
       {
-        poolType: 1,
-        tp: 1,
-        sl: 1,
         isActive: 1,
-        purchaseAmountInSol: 1,
-        slippagePercentage: 1,
-        priorityFeeInSol: 1,
-        minimumLiquidity: 1,
-        autoSellTimeMinutes: 1,
-        maxTopHolderPercentage: 1,
-        maxTopTenHoldersPercentage: 1,
         notificationOn: 1,
       }
     );
@@ -46,19 +36,9 @@ const getUser = async (telegramId: string) => {
 const updateUser = async (
   telegramId: string,
   updates: {
-    poolType?: PoolType;
     notificationOn?: Toggle;
-    tp?: TPLevels;
-    sl?: number;
     isActive?: Toggle;
     isDeleted?: Toggle;
-    purchaseAmountInSol?: number;
-    slippagePercentage?: number;
-    priorityFeeInSol?: number;
-    minimumLiquidity?: number;
-    autoSellTimeMinutes?: number;
-    maxTopHolderPercentage?: number;
-    maxTopTenHoldersPercentage?: number;
   }
 ) => {
   const existingUser = await UserModal.findOne({ telegramId });
@@ -77,17 +57,7 @@ const updateUser = async (
 const getAllUsers = async (filters: FilterQuery<IUser>) => {
   try {
     const users = await UserModal.find(filters, {
-      poolType: 1,
-      tp: 1,
-      sl: 1,
       isActive: 1,
-      purchaseAmountInSol: 1,
-      slippagePercentage: 1,
-      priorityFeeInSol: 1,
-      minimumLiquidity: 1,
-      autoSellTimeMinutes: 1,
-      maxTopHolderPercentage: 1,
-      maxTopTenHoldersPercentage: 1,
       notificationOn: 1,
       isAdmin: 1,
       telegramId: 1,
@@ -102,17 +72,7 @@ const getAllUsers = async (filters: FilterQuery<IUser>) => {
 const getUserById = async (userId: string) => {
   try {
     const user = await UserModal.findById(userId, {
-      poolType: 1,
-      tp: 1,
-      sl: 1,
       isActive: 1,
-      purchaseAmountInSol: 1,
-      slippagePercentage: 1,
-      priorityFeeInSol: 1,
-      minimumLiquidity: 1,
-      autoSellTimeMinutes: 1,
-      maxTopHolderPercentage: 1,
-      maxTopTenHoldersPercentage: 1,
       notificationOn: 1,
     });
     if (!user) {
@@ -130,17 +90,7 @@ const getAdminUser = async () => {
     const user = await UserModal.findOne(
       { isAdmin: Toggle.TRUE },
       {
-        poolType: 1,
-        tp: 1,
-        sl: 1,
         isActive: 1,
-        purchaseAmountInSol: 1,
-        slippagePercentage: 1,
-        priorityFeeInSol: 1,
-        minimumLiquidity: 1,
-        autoSellTimeMinutes: 1,
-        maxTopHolderPercentage: 1,
-        maxTopTenHoldersPercentage: 1,
         notificationOn: 1,
         isAdmin: 1,
         telegramId: 1,
