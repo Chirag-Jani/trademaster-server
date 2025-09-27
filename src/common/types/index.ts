@@ -12,12 +12,28 @@ export interface IUser {
   isDeleted: Toggle;
   createdAt: number;
   updatedAt: number;
+
+  vol_24hr_gte?: string;
+  pc_24_hr_gte?: number;
+  liquidity_gte?: number;
+  market_cap_gte?: string;
+  chain?: string[] | string;
+  amount?: number; // Trading amount in USD
+
+  mention_count_24hr_gte?: number;
+  influencer_count_24hr_gte?: string;
+
+  // Trading targets
+  stop_loss?: string;
+  profit_target?: string;
 }
 
 // TELEGRAM
 export interface StatusMessage {
   notificationOn: Toggle;
   isActive: Toggle;
+  stop_loss?: string;
+  profit_target?: string;
 }
 
 // TOKEN LEADERBOARD
