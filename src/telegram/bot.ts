@@ -250,8 +250,8 @@ const initTelegramBot = async () => {
 
   const filterValues = {
     chain: [
-      { label: "ETH", value: "ETH" },
-      { label: "BASE", value: "BASE" },
+      { label: "ETH", value: "Ethereum" },
+      { label: "BASE", value: "Base" },
       { label: "BOTH", value: "BOTH" },
     ],
     marketCap: [
@@ -399,7 +399,7 @@ const initTelegramBot = async () => {
       const updateValue =
         category === "chain"
           ? value === "BOTH"
-            ? ["ETH", "BASE"]
+            ? ["ethereum", "base"]
             : [value]
           : value;
 

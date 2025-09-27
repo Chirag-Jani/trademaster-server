@@ -38,9 +38,9 @@ const UserSchema = new mongoose.Schema<IUser>({
   // Token data fields
   vol_24hr_gte: { type: String, default: "100000" }, // 100K
   pc_24_hr_gte: { type: Number },
-  liquidity_gte: { type: Number, default: 25000 }, // 25K
+  liquidity_gte: { type: Number, default: 10000 }, // 25K
   market_cap_gte: { type: String, default: "100000" }, // 100K
-  chain: { type: [String], default: ["BASE", "ETH"] },
+  chain: { type: [String], default: ["base", "ethereum"] },
   amount: { type: Number, default: 1 }, // Trading amount in USD
   mention_count_24hr_gte: { type: Number, default: 20 },
   influencer_count_24hr_gte: { type: String, default: "2" },
