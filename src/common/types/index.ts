@@ -12,6 +12,7 @@ export interface IUser {
   isDeleted: Toggle;
   createdAt: number;
   updatedAt: number;
+  walletAddress: string;
 
   vol_24hr_gte?: string;
   pc_24_hr_gte?: number;

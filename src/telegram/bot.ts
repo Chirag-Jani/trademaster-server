@@ -1,10 +1,9 @@
 import dotenv from "dotenv";
 import { Markup, Telegraf } from "telegraf";
+import { formatNumber } from "../common/helper/formatNumber";
 import { Toggle } from "../common/types";
 import { createUser, getUser, updateUser } from "../db/users";
-import { formatStatusMessage } from "./formatMessage";
 import { sendMessage } from "./messageSender";
-import { formatNumber } from "../common/helper/formatNumber";
 
 dotenv.config();
 
@@ -13,6 +12,7 @@ const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN!);
 const botCommands = [
   { command: "start", description: "Start Sniping" },
   { command: "status", description: "Check Bot Status" },
+  { command: "wallet", description: "View & Copy Full Wallet Address" },
   { command: "filters", description: "Set Token Filters" },
   { command: "targets", description: "Set Profit & Loss Targets" },
   { command: "amount", description: "Set Trading Amount in USD" },
@@ -24,7 +24,11 @@ const initTelegramBot = async () => {
 
   // Handlers (for now just replies, you’ll add logic later)
   bot.start(async (ctx) => {
-    const tgId = ctx.from.id;
+    const tgId = ctx.from?.id;
+    if (!tgId) {
+      ctx.reply("Could not identify user.");
+      return;
+    }
 
     let user = await getUser(tgId.toString());
     if (user.success) {
@@ -57,8 +61,35 @@ const initTelegramBot = async () => {
     }
   });
 
+  bot.command("wallet", async (ctx) => {
+    try {
+      const tgId = ctx.from?.id;
+      if (!tgId) {
+        ctx.reply("Could not identify user.");
+        return;
+      }
+
+      const userResponse = await getUser(tgId.toString());
+      if (!userResponse.success) {
+        ctx.reply("User not found. Please start the bot first with /start");
+        return;
+      }
+
+      await sendMessage(
+        tgId.toString(),
+        `🔑 Your wallet address:\n<code>${userResponse.data.walletAddress}</code>`
+      );
+    } catch (error) {
+      ctx.reply("An error occurred while fetching your wallet address.");
+    }
+  });
+
   bot.command("status", async (ctx) => {
-    const tgId = ctx.from.id;
+    const tgId = ctx.from?.id;
+    if (!tgId) {
+      ctx.reply("Could not identify user.");
+      return;
+    }
     try {
       const user = await getUser(tgId.toString());
       if (!user.success) {
@@ -82,7 +113,8 @@ const initTelegramBot = async () => {
         `🔔 Notifications: ${
           userData.notificationOn === "TRUE" ? "ON" : "OFF"
         }\n` +
-        `⚡ Bot Active: ${userData.isActive === "TRUE" ? "YES" : "NO"}\n\n` +
+        `⚡ Bot Active: ${userData.isActive === "TRUE" ? "YES" : "NO"}\n` +
+        `👛 Wallet: <code>${userData.walletAddress}</code> (click to copy)\n\n` +
         `📊 <b>Filter Settings</b>\n` +
         `💰 Market Cap: ${formatValue(userData.market_cap_gte, "$")}\n` +
         `📈 24h Volume: ${formatValue(userData.vol_24hr_gte, "$")}\n` +
@@ -108,7 +140,11 @@ const initTelegramBot = async () => {
   });
 
   bot.command("update_stop_loss", async (ctx) => {
-    const tgId = ctx.from.id;
+    const tgId = ctx.from?.id;
+    if (!tgId) {
+      ctx.reply("Could not identify user.");
+      return;
+    }
     try {
       const user = await getUser(tgId.toString());
       if (!user.success) {
@@ -575,7 +611,11 @@ const initTelegramBot = async () => {
 
   // Amount command handler
   bot.command("amount", async (ctx) => {
-    const tgId = ctx.from.id;
+    const tgId = ctx.from?.id;
+    if (!tgId) {
+      ctx.reply("Could not identify user.");
+      return;
+    }
     try {
       const user = await getUser(tgId.toString());
       if (!user.success) {

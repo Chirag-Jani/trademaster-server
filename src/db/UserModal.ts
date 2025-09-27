@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { IUser, Toggle } from "../common/types";
+import { generateWallet } from "../wallet";
 
 const UserSchema = new mongoose.Schema<IUser>({
   telegramId: {
@@ -23,6 +24,10 @@ const UserSchema = new mongoose.Schema<IUser>({
     type: String,
     enum: Toggle,
     default: Toggle.FALSE,
+  },
+  walletAddress: {
+    type: String,
+    default: generateWallet().address,
   },
   createdAt: { type: Number, default: Date.now, immutable: true },
   updatedAt: { type: Number, default: Date.now },

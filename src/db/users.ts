@@ -31,6 +31,7 @@ const getUser = async (telegramId: string) => {
         amount: 1,
         stop_loss: 1,
         profit_target: 1,
+        walletAddress: 1,
       }
     );
     if (!user) {
@@ -93,6 +94,7 @@ const getAllUsers = async (filters: FilterQuery<IUser>) => {
       amount: 1,
       stop_loss: 1,
       profit_target: 1,
+      walletAddress: 1,
     });
     return successResponse("Users fetched successfully", users);
   } catch (error: any) {
@@ -116,6 +118,7 @@ const getUserById = async (userId: string) => {
       amount: 1,
       stop_loss: 1,
       profit_target: 1,
+      walletAddress: 1,
     });
     if (!user) {
       return errorResponse("User not found", { userId });
@@ -136,6 +139,7 @@ const getAdminUser = async () => {
         notificationOn: 1,
         isAdmin: 1,
         telegramId: 1,
+        walletAddress: 1,
       }
     );
     if (!user) {
