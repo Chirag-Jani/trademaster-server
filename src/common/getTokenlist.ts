@@ -19,6 +19,7 @@ export async function getTokenLeaderboard(): Promise<GetTokenLeaderboardResponse
           vol_24hr_gte: 200000,
           sort_by: "mention_count_24hr_desc",
           is_best_pair: 1,
+          chain: ["base", "ethereum"],
         },
         headers: {
           accept: "application/json, text/plain, */*",

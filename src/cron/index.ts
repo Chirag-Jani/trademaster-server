@@ -1,8 +1,10 @@
 import { CronJob } from "cron";
 import dotenv from "dotenv";
-import { getAllUsers } from "../db/users";
 import { getTokenLeaderboard } from "../common/getTokenlist";
 import { IUser, Toggle, TokenDataItem } from "../common/types";
+import { getAllUsers } from "../db/users";
+import { formatTokenNotification } from "../telegram/formatMessage";
+import { sendMessage } from "../telegram/messageSender";
 
 // Load environment variables
 dotenv.config();
@@ -71,6 +73,7 @@ const filterTokensForUser = (
 const cronFunction = async () => {
   try {
     const tokenData = await getTokenLeaderboard();
+    console.log("Total tokens:", tokenData.result.length);
     const usersResponse = await getAllUsers({ isActive: Toggle.TRUE });
 
     if (!usersResponse.success || !tokenData.result) {
@@ -83,13 +86,32 @@ const cronFunction = async () => {
     // Process tokens for each user
     for (const user of users) {
       try {
+        // Skip if notifications are turned off for the user
+        if (user.notificationOn !== Toggle.TRUE) {
+          console.log(`Notifications are disabled for user ${user.telegramId}`);
+          continue;
+        }
+
         const filteredTokens = filterTokensForUser(tokenData.result, user);
         console.log(
           `Filtered ${filteredTokens.length} tokens for user ${user.telegramId}`
         );
 
-        // TODO: Add your logic here to handle the filtered tokens for each user
-        // For example, send notifications, update database, etc.
+        // Send notifications for each filtered token
+        for (const token of filteredTokens) {
+          try {
+            const message = formatTokenNotification(token);
+            await sendMessage(user.telegramId, message);
+
+            // Add a small delay between messages to avoid rate limiting
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          } catch (error) {
+            console.error(
+              `Failed to send notification for token ${token.token_symbol} to user ${user.telegramId}:`,
+              error
+            );
+          }
+        }
       } catch (error) {
         console.error(
           `Error processing tokens for user ${user.telegramId}:`,
