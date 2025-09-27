@@ -21,6 +21,16 @@ const getUser = async (telegramId: string) => {
       {
         isActive: 1,
         notificationOn: 1,
+        vol_24hr_gte: 1,
+        pc_24_hr_gte: 1,
+        liquidity_gte: 1,
+        market_cap_gte: 1,
+        chain: 1,
+        mention_count_24hr_gte: 1,
+        influencer_count_24hr_gte: 1,
+        amount: 1,
+        stop_loss: 1,
+        profit_target: 1,
       }
     );
     if (!user) {
@@ -39,6 +49,18 @@ const updateUser = async (
     notificationOn?: Toggle;
     isActive?: Toggle;
     isDeleted?: Toggle;
+    // Token data fields
+    vol_24hr_gte?: string;
+    pc_24_hr_gte?: number;
+    liquidity_gte?: number;
+    market_cap_gte?: string;
+    chain?: string[] | string;
+    mention_count_24hr_gte?: number;
+    influencer_count_24hr_gte?: string;
+    amount?: number;
+    // Trading targets
+    stop_loss?: string;
+    profit_target?: string;
   }
 ) => {
   const existingUser = await UserModal.findOne({ telegramId });
@@ -61,6 +83,16 @@ const getAllUsers = async (filters: FilterQuery<IUser>) => {
       notificationOn: 1,
       isAdmin: 1,
       telegramId: 1,
+      vol_24hr_gte: 1,
+      pc_24_hr_gte: 1,
+      liquidity_gte: 1,
+      market_cap_gte: 1,
+      chain: 1,
+      mention_count_24hr_gte: 1,
+      influencer_count_24hr_gte: 1,
+      amount: 1,
+      stop_loss: 1,
+      profit_target: 1,
     });
     return successResponse("Users fetched successfully", users);
   } catch (error: any) {
@@ -74,6 +106,16 @@ const getUserById = async (userId: string) => {
     const user = await UserModal.findById(userId, {
       isActive: 1,
       notificationOn: 1,
+      vol_24hr_gte: 1,
+      pc_24_hr_gte: 1,
+      liquidity_gte: 1,
+      market_cap_gte: 1,
+      chain: 1,
+      mention_count_24hr_gte: 1,
+      influencer_count_24hr_gte: 1,
+      amount: 1,
+      stop_loss: 1,
+      profit_target: 1,
     });
     if (!user) {
       return errorResponse("User not found", { userId });
