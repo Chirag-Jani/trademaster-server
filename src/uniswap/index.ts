@@ -1,24 +1,43 @@
 import { SwapExactInSingle } from "@uniswap/v4-sdk";
 import dotenv from "dotenv";
 import { ethers } from "ethers";
+import {
+  BASE_POSITION_MANAGER_ABI,
+  BASE_POSITION_MANAGER_CONTRACT_ADDRESS,
+  BASE_QUOTER_ABI,
+  BASE_QUOTER_CONTRACT_ADDRESS,
+  BASE_RPC_URL,
+  ETH_POSITION_MANAGER_ABI,
+  ETH_POSITION_MANAGER_CONTRACT_ADDRESS,
+  ETH_QUOTER_ABI,
+  ETH_QUOTER_CONTRACT_ADDRESS,
+  ETH_RPC_URL,
+} from "./constants";
 
 dotenv.config();
 
-import ETH_QUOTER_ABI = require("./abis/EthQuoter.json");
-import ETH_POSITION_MANAGER_ABI = require("./abis/EthPositionManager.json");
-const ETH_QUOTER_CONTRACT_ADDRESS = process.env
-  .ETH_QUOTER_CONTRACT_ADDRESS as string;
-const ETH_POSITION_MANAGER_CONTRACT_ADDRESS = process.env
-  .ETH_POSITION_MANAGER_CONTRACT_ADDRESS as string;
-const ETH_RPC_URL = process.env.ETH_RPC as string;
-
-import BASE_QUOTER_ABI = require("./abis/BaseQuoter.json");
-import BASE_POSITION_MANAGER_ABI = require("./abis/BasePositionManager.json");
-const BASE_QUOTER_CONTRACT_ADDRESS = process.env
-  .BASE_QUOTER_CONTRACT_ADDRESS as string;
-const BASE_POSITION_MANAGER_CONTRACT_ADDRESS = process.env
-  .BASE_POSITION_MANAGER_CONTRACT_ADDRESS as string;
-const BASE_RPC_URL = process.env.ETH_RPC as string;
+// const getTokenDecimals = async (
+//   chain: "ethereum" | "base",
+//   tokenAddress: string
+// ) => {
+//   if (chain === "ethereum") {
+//     const positionManagerContract = new ethers.Contract(
+//       tokenAddress,
+//       IERC20_ABI,
+//       new ethers.providers.JsonRpcProvider(ETH_RPC_URL)
+//     );
+//     const poolKeys = await positionManagerContract.poolKeys(tokenAddress);
+//     return poolKeys;
+//   } else {
+//     const positionManagerContract = new ethers.Contract(
+//       tokenAddress,
+//       IERC20_ABI,
+//       new ethers.providers.JsonRpcProvider(BASE_RPC_URL)
+//     );
+//     const poolKeys = await positionManagerContract.poolKeys(tokenAddress);
+//     return poolKeys;
+//   }
+// };
 
 const getPoolKeys = async (
   chain: "ethereum" | "base",
@@ -46,7 +65,6 @@ const getPoolKeys = async (
 const getTokenQuote = async (
   chain: "ethereum" | "base",
   token1: string,
-  token1Decimals: number,
   amount: number,
   pairId: string
 ) => {
@@ -97,12 +115,7 @@ const getTokenQuote = async (
         hookData: CurrentConfig.hookData,
       });
 
-    console.log(
-      `Amount Out: ${ethers.utils.formatUnits(
-        quotedAmountOut[0],
-        token1Decimals
-      )} `
-    );
+    console.log(`Amount Out: ${ethers.utils.formatUnits(quotedAmountOut[0])} `);
   } catch (error) {
     console.log("error fetching quote", error);
   }
