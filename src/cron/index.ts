@@ -5,6 +5,7 @@ import { IUser, Toggle, TokenDataItem } from "../common/types";
 import { getAllUsers } from "../db/users";
 import { formatTokenNotification } from "../telegram/formatMessage";
 import { sendMessage } from "../telegram/messageSender";
+import TokenModel from "../db/TokenModel";
 
 // Load environment variables
 dotenv.config();
@@ -75,8 +76,56 @@ const cronFunction = async () => {
     }
 
     const users = usersResponse.data;
+    const currentTime = Date.now();
 
-    // Process tokens for each user
+    console.log("Starting token database update...");
+    // Update token database and get new tokens
+    const newTokens: TokenDataItem[] = [];
+    for (const token of tokenData.result) {
+      try {
+        if (!token.token_id) {
+          console.log("Skipping token without token_id:", token.token_symbol);
+          continue;
+        }
+
+        // Check if token exists in database
+        const existingToken = await TokenModel.findOne({
+          token_id: token.token_id,
+        });
+
+        if (!existingToken) {
+          // New token found
+          console.log(
+            `Storing new token: ${token.token_symbol} (${token.token_id})`
+          );
+          const tokenDoc = new TokenModel({
+            ...token,
+            createdAt: currentTime,
+            updatedAt: currentTime,
+          });
+          await tokenDoc.save();
+          newTokens.push(token);
+        } else {
+          // Update existing token
+          console.log(
+            `Updating existing token: ${token.token_symbol} (${token.token_id})`
+          );
+          await TokenModel.updateOne(
+            { token_id: token.token_id },
+            {
+              ...token,
+              updatedAt: currentTime,
+            }
+          );
+        }
+      } catch (error) {
+        console.error(`Error processing token ${token.token_symbol}:`, error);
+      }
+    }
+
+    console.log(`Found ${newTokens.length} new tokens`);
+
+    // Process new tokens for each user
     for (const user of users) {
       try {
         // Skip if notifications are turned off for the user
@@ -85,13 +134,14 @@ const cronFunction = async () => {
           continue;
         }
 
-        const filteredTokens = filterTokensForUser(tokenData.result, user);
+        // Filter new tokens based on user preferences
+        const filteredNewTokens = filterTokensForUser(newTokens, user);
         console.log(
-          `Filtered ${filteredTokens.length} tokens for user ${user.telegramId}`
+          `Filtered ${filteredNewTokens.length} new tokens for user ${user.telegramId}`
         );
 
-        // Send notifications for each filtered token
-        for (const token of filteredTokens) {
+        // Send notifications for each filtered new token
+        for (const token of filteredNewTokens) {
           try {
             const message = formatTokenNotification(token);
             await sendMessage(user.telegramId, message);
@@ -112,6 +162,10 @@ const cronFunction = async () => {
         );
       }
     }
+
+    // Clean up old tokens (older than 7 days)
+    const sevenDaysAgo = currentTime - 7 * 24 * 60 * 60 * 1000;
+    await TokenModel.deleteMany({ updatedAt: { $lt: sevenDaysAgo } });
   } catch (error) {
     console.error("Error in cron job:", error);
   }

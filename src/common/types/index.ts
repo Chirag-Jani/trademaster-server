@@ -127,6 +127,8 @@ export interface TokenDataItem {
   market_data_source?: string;
   cmc_slug?: string;
   cg_id?: string;
+  createdAt?: number;
+  updatedAt?: number;
 }
 
 export interface GetTokenLeaderboardResponse {
