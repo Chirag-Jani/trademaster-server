@@ -132,13 +132,3 @@ export interface GetTokenLeaderboardResponse {
   result: TokenDataItem[];
   is_more_data: boolean;
 }
-
-export interface GetTokenLeaderboardParams {
-  start?: number;
-  limit?: number;
-  market_cap_gte?: number;
-  market_cap_lte?: number;
-  vol_24hr_gte?: number;
-  sort_by?: string;
-  is_best_pair?: number;
-}

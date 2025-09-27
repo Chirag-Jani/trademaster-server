@@ -29,9 +29,11 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@types/cron": "^2.0.1",
     "@uniswap/sdk-core": "^7.7.2",
     "@uniswap/v4-sdk": "^1.21.4",
     "axios": "^1.12.2",
+    "cron": "^4.3.3",
     "dotenv": "^17.2.2",
     "ethers": "5.7",
     "mongoose": "^8.18.2",
