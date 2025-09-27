@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "cross-env NODE_ENV=development ts-node-dev --respawn src/index.ts",
+    "dev": "NODE_ENV=development ts-node-dev --respawn src/index.ts",
     "clean": "rimraf dist"
   },
   "repository": {
@@ -29,8 +29,11 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@uniswap/sdk-core": "^7.7.2",
+    "@uniswap/v4-sdk": "^1.21.4",
     "axios": "^1.12.2",
     "dotenv": "^17.2.2",
+    "ethers": "5.7",
     "mongoose": "^8.18.2",
     "telegraf": "^4.16.3"
   }
