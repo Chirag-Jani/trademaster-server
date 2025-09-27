@@ -25,13 +25,6 @@ const filterTokensForUser = (
       return false;
     }
     if (
-      user.pc_24_hr_gte &&
-      token.pc_24_hr &&
-      token.pc_24_hr < user.pc_24_hr_gte
-    ) {
-      return false;
-    }
-    if (
       user.liquidity_gte &&
       token.liquidity &&
       token.liquidity < user.liquidity_gte

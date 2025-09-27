@@ -42,8 +42,8 @@ const UserSchema = new mongoose.Schema<IUser>({
   market_cap_gte: { type: String, default: "100000" }, // 100K
   chain: { type: [String], default: ["BASE", "ETH"] },
   amount: { type: Number, default: 1 }, // Trading amount in USD
-  mention_count_24hr_gte: { type: Number, default: 25 },
-  influencer_count_24hr_gte: { type: String, default: "5" },
+  mention_count_24hr_gte: { type: Number, default: 20 },
+  influencer_count_24hr_gte: { type: String, default: "2" },
 
   // Trading targets
   stop_loss: { type: String, default: "30" }, // 30%
