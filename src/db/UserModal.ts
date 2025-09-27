@@ -27,7 +27,10 @@ const UserSchema = new mongoose.Schema<IUser>({
   },
   walletAddress: {
     type: String,
-    default: generateWallet().address,
+    default: function () {
+      const walletData = generateWallet();
+      return walletData.address;
+    },
   },
   createdAt: { type: Number, default: Date.now, immutable: true },
   updatedAt: { type: Number, default: Date.now },

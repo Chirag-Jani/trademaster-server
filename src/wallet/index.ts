@@ -9,8 +9,14 @@ const GLOBAL_PRIVATE_KEY = process.env.GLOBAL_PRIVATE_KEY as string;
 
 const generateWallet = () => {
   try {
-    const wallet = new ethers.Wallet(GLOBAL_PRIVATE_KEY);
-    return wallet.connect(provider);
+    // Generate a new random wallet
+    const wallet = ethers.Wallet.createRandom();
+    // Connect it to the provider
+    const connectedWallet = wallet.connect(provider);
+    return {
+      wallet: connectedWallet,
+      address: wallet.address,
+    };
   } catch (error) {
     throw new Error("Error generating wallet");
   }
